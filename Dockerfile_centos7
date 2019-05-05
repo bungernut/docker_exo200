@@ -1,0 +1,46 @@
+FROM centos:centos7
+
+RUN yum -y update && yum -y install file wget git make cmake gcc-c++ gcc binutils libX11 libX11-devel libXpm-devel libXft-devel libXext-devl openssl-devel mesa-libGL-devel mesa-libGLU-devel mysql-devel fftw-devel graphviz-devel python-devel libxml2-devel gsl-static
+
+WORKDIR /tmp_root/
+RUN wget -q https://root.cern.ch/download/root_v5.34.36.source.tar.gz && \
+    tar xf root_v5.34.36.source.tar.gz && \
+    rm root_v5.34.36.source.tar.gz 
+WORKDIR /tmp_root/root
+RUN sh ./configure --disable-xml --disable-fftw3 --enable-builtin-pcre --enable-builtin-freetype --enable-roofit --disable-krb5 --disable-ssl --enable-python --enable-soversion && \
+    make -j2 
+
+RUN sh bin/thisroot.sh
+
+WORKDIR /SOFTWARE/clhep/
+RUN wget -q http://proj-clhep.web.cern.ch/proj-clhep/DISTRIBUTION/distributions/clhep-2.0.4.5.tgz && \
+    tar xf clhep-2.0.4.5.tgz && \
+    rm clhep-2.0.4.5.tgz 
+WORKDIR /SOFTWARE/clhep/2.0.4.5/CLHEP
+RUN ls
+RUN ./configure --prefix /SOFTWARE/clhep/2.0.4.5/ && \
+    make && \
+    make install
+
+WORKDIR /SOFTWARE/
+RUN wget -q http://cern.ch/geant4-data/releases/geant4.9.3.p02.tar.gz && \
+    tar xf geant4.9.3.p02.tar.gz && \
+    rm geant4.9.3.p02.tar.gz 
+
+WORKDIR /SOFTWARE/geant4.9.3.p02/data 
+RUN wget -q http://cern.ch/geant4-data/datasets/PhotonEvaporation.2.0.tar.gz && tar xf PhotonEvaporation.2.0.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/G4NDL.3.13.tar.gz && tar xf G4NDL.3.13.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/G4EMLOW.6.9.tar.gz && tar xf G4EMLOW.6.9.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/G4RadioactiveDecay.3.2.tar.gz && tar xf G4RadioactiveDecay.3.2.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/G4ABLA.3.0.tar.gz && tar xf G4ABLA.3.0.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/RealSurface.1.0.tar.gz && tar xf RealSurface.1.0.tar.gz && \
+    rm -f *.tar.gz
+WORKDIR /SOFTWARE/geant4.9.3.p02
+ADD config.sh_centos7 config.sh
+
+
+    
+  
+
+    
+
