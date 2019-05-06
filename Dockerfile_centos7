@@ -35,8 +35,12 @@ RUN wget -q http://cern.ch/geant4-data/datasets/PhotonEvaporation.2.0.tar.gz && 
     wget -q http://cern.ch/geant4-data/datasets/G4ABLA.3.0.tar.gz && tar xf G4ABLA.3.0.tar.gz && \
     wget -q http://cern.ch/geant4-data/datasets/RealSurface.1.0.tar.gz && tar xf RealSurface.1.0.tar.gz && \
     rm -f *.tar.gz
+RUN yum install -y vim patch
 WORKDIR /SOFTWARE/geant4.9.3.p02
-ADD config.sh_centos7 config.sh
+ADD config.sh_centos7 /SOFTWARE/g4config.sh
+RUN sed '573i\                        g4query_conf=yes' Configure > Configure2
+RUN /bin/bash ./Configure2 -f /SOFTWARE/g4config.sh -d -e -r -build
+RUN ./Configure2
 
 
     
