@@ -42,10 +42,9 @@ ADD config.sh_centos7 /SOFTWARE/g4config.sh
 # Fixes bug with configure script? For some reason the configure script runs in terminal
 # but from RUN command this catch stops the script. If you delete the exit in the catch it runs...
 # This deletes the exit 
+#SHELL ["/bin/bash","-c"]
 RUN sed -i '660d' Configure 
-RUN /bin/bash ./Configure -f /SOFTWARE/g4config.sh -d -e -r -build
-
-#RUN /bin/bash ./Configure && source env.sh
+RUN ./Configure -f /SOFTWARE/g4config.sh -d -e -r -build && ./Configure && source env.sh
 
 
 
