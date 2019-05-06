@@ -38,9 +38,15 @@ RUN wget -q http://cern.ch/geant4-data/datasets/PhotonEvaporation.2.0.tar.gz && 
 RUN yum install -y vim patch
 WORKDIR /SOFTWARE/geant4.9.3.p02
 ADD config.sh_centos7 /SOFTWARE/g4config.sh
-RUN sed '573i\                        g4query_conf=yes' Configure > Configure2
-RUN /bin/bash ./Configure2 -f /SOFTWARE/g4config.sh -d -e -r -build
-RUN ./Configure2
+
+# Fixes bug with configure script? For some reason the configure script runs in terminal
+# but from RUN command this catch stops the script. If you delete the exit in the catch it runs...
+# This deletes the exit 
+RUN sed -i '660d' Configure 
+RUN /bin/bash ./Configure -f /SOFTWARE/g4config.sh -d -e -r -build
+
+#RUN /bin/bash ./Configure && source env.sh
+
 
 
     
