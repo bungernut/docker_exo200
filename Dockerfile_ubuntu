@@ -12,7 +12,7 @@ RUN sh ./configure --disable-xml --disable-fftw3 --enable-builtin-pcre --enable-
 RUN make -j2
 
 WORKDIR /SOFTWARE/clhep/
-RUN wget -q http://proj-clhep.web.cern.ch/proj-clhep/DISTRIBUTION/distributions/clhep-2.0.4.5.tgz && \
+RUN wget -q https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-2.0.4.5.tgz && \
     tar xf clhep-2.0.4.5.tgz && \
     rm clhep-2.0.4.5.tgz
 WORKDIR /SOFTWARE/clhep/2.0.4.5/CLHEP
