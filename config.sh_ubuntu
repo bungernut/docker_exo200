@@ -11,6 +11,7 @@
 # Configuration time: Tue May  7 19:09:36 UTC 2019
 # Configured by     : root
 # Target system     : linux e598fce5558c 4.15.0-47-generic #50-ubuntu smp wed mar 13 10:44:52 utc 2019 x86_64 x86_64 x86_64 gnulinux 
+g4query_conf='no'
 
 Author=''
 Date=''

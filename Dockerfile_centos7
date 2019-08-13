@@ -1,6 +1,6 @@
 FROM centos:centos7
 
-RUN yum -y update && yum -y install file wget git make cmake gcc-c++ gcc binutils libX11 libX11-devel libXpm-devel libXft-devel libXext-devl openssl-devel mesa-libGL-devel mesa-libGLU-devel mysql-devel fftw-devel graphviz-devel python-devel libxml2-devel gsl-static
+RUN yum -y update && yum -y install file wget git make cmake gcc-c++ gcc binutils libX11 libX11-devel libXpm-devel libXft-devel libXext-devl openssl-devel mesa-libGL-devel mesa-libGLU-devel mysql-devel fftw-devel graphviz-devel python-devel libxml2-devel gsl-static vim patch
 
 WORKDIR /tmp_root/
 RUN wget -q https://root.cern.ch/download/root_v5.34.36.source.tar.gz && \
@@ -37,19 +37,12 @@ RUN wget -q http://cern.ch/geant4-data/datasets/PhotonEvaporation.2.0.tar.gz && 
     rm -f *.tar.gz
 RUN yum install -y vim patch
 WORKDIR /SOFTWARE/geant4.9.3.p02
-ADD config.sh_centos7 /SOFTWARE/g4config.sh
+ADD config.sh_centos7 /SOFTWARE/geant4.9.3.p02/g4config.sh
 
 # Fixes bug with configure script? For some reason the configure script runs in terminal
 # but from RUN command this catch stops the script. If you delete the exit in the catch it runs...
 # This deletes the exit 
 #SHELL ["/bin/bash","-c"]
-RUN sed -i '660d' Configure 
-RUN ./Configure -f /SOFTWARE/g4config.sh -d -e -r -build && ./Configure && source env.sh
-
-
-
-    
-  
-
-    
-
+#ADD config.sh_centos7 /SOFTWARE/g4config.sh
+#RUN sed -i '660d' Configure 
+RUN ./Configure -f g4config.sh -d -e -r -build && ./Configure && source env.sh

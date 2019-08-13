@@ -37,6 +37,6 @@ RUN wget -q http://cern.ch/geant4-data/datasets/PhotonEvaporation.2.0.tar.gz && 
 WORKDIR /SOFTWARE/geant4.9.3.p02
 ADD config.sh_ubuntu /SOFTWARE/g4config.sh
 #SHELL ["/bin/bash","-c"]
-RUN sed -i '660d' Configure
-RUN ./Configure -f /SOFTWARE/g4config.sh -d -e -r -build 
-RUN ./Configure && source env.sh
+#RUN sed -i '660d' Configure
+RUN ["./Configure", "-f", "/SOFTWARE/g4config.sh", "-d", "-e", "-r", "-build"]
+RUN ["./Configure", "&&", "source env.sh"]
