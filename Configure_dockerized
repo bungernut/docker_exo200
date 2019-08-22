@@ -650,18 +650,18 @@ EOM
 	;;
 esac
 
-: Sanity checks
-case "$fastread$alldone" in
-yescontyes|yesexityes) ;;
-*)
-	if test "x$g4query_conf" != "xyes" ; then
-	    if test ! -t 0; then
-		echo "Say 'sh Configure', not 'sh <Configure'"
-		exit 1
-	    fi
-	fi
-	;;
-esac
+#: Sanity checks
+#case "$fastread$alldone" in
+#yescontyes|yesexityes) ;;
+#*)
+#	if test "x$g4query_conf" != "xyes" ; then
+#	    if test ! -t 0; then
+#		echo "Say 'sh Configure', not 'sh <Configure'"
+#		exit 1
+#	    fi
+#	fi
+#	;;
+#esac
 
 exec 4>&1
 case "$silent" in
@@ -2095,30 +2095,31 @@ echo "                --- Geant4 Toolkit Installation  ---"
 echo "                  (setting environments for USER )"
 echo " "
 
-	cat >&2 <<EOM
----------------------------------------------------
-The Geant4 toolkit installation was found.
-The files env.[c]sh will be copied to your current directory.
-For setting Geant4 environments you should make:
 
-source env.csh
+echo "---------------------------------------------------"
+echo "The Geant4 toolkit installation was found."
+echo "The files env.[c]sh will be copied to your current directory."
+echo "For setting Geant4 environments you should make:"
+echo " "
+echo "source env.csh "
+echo " "
+echo "or"
+echo " "
+echo ". env.sh"
+echo " "
+echo "It will also check G4WORKDIR setting and set it to"
+echo "your HOME if needed."
+echo "You can use these files also for further modifications"
+echo "(adding your own environments)."
+echo "---------------------------------------------------"
 
-or
-
-. env.sh
-
-It will also check G4WORKDIR setting and set it to
-your HOME if needed.
-You can use these files also for further modifications
-(adding your own environments).
----------------------------------------------------
-EOM
 	$rm -rf .config/UU
 
 cp -i $src/.config/bin/$g4system/env.csh .
 cp -i $src/.config/bin/$g4system/env.sh  .
+#cp $pwd/.config/bin/Linux-g++/env.sh .
 
-	exit 1
+	exit 0
 	fi #end of -lib or user
 else #there is no env.sh
 
@@ -6073,5 +6074,5 @@ fi
 $rm -f kit*isdone ark*isdone
 $rm -rf .config/UU
 
-: End of Configure
+#: End of Configure
 
