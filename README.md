@@ -1,4 +1,22 @@
 # docker_exo200
+## Introduction
+exo200_ubuntu_root has basic root v5 and essential build tools in ubuntu image ~700MB
+exo200_ubuntu_geant4 installs CLHEP and geant4 on top of exo200_ubuntu_root
+The image with offline is kept in a private repository, but these can be used to compile offline as needed
+
+## Building the images
+### exo200_ubuntu_root
+This image can be build alone with the docker file, updates to this github should trigger rebuild of this image
+### exo200_ubuntu_geant4
+* Requires manual steps. Build the image using the Docker_ubuntut_geant4 file\
+`docker build -t exo200_ubuntu_geant4_pre -f Docker_ubuntut_geant4 .`
+* Run the image and compile per instruction in Docker_ubuntut_geant4
+* Commit the changes to the docker-image\
+`docker commit <docker_ID> bmong/exo200_ubuntu_geant4:<tag>`
+* Push the image to dockerhub\
+`docker push bmong/exo200_ubuntu_geant4:v01`
+
+
 
 ## Installing Docker on linux mint (careful instructions for Ubuntu are wrong for mint)\
 The relevent change is this one:\
