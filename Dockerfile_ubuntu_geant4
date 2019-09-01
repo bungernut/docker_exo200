@@ -1,0 +1,98 @@
+FROM bmong/exo200_ubuntu_root_base:v01 as exo200_ubuntu_geant4_pre
+MAINTAINER bung@slac.stanford.edu
+
+WORKDIR /SOFTWARE/clhep/
+RUN wget -q https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-2.0.4.5.tgz \
+    && tar xf clhep-2.0.4.5.tgz \
+    && rm clhep-2.0.4.5.tgz
+WORKDIR /SOFTWARE/clhep/2.0.4.5/CLHEP
+RUN ls
+RUN ./configure --prefix /SOFTWARE/clhep/2.0.4.5/ && \
+    make -j2 && \
+    make install 
+
+WORKDIR /SOFTWARE/
+RUN rm -rf /SOFTWARE/clhep/2.0.4.5/CLHEP \
+    && wget -q http://cern.ch/geant4-data/releases/geant4.9.3.p02.tar.gz \
+    && tar xf geant4.9.3.p02.tar.gz \
+    && rm geant4.9.3.p02.tar.gz
+
+WORKDIR /SOFTWARE/geant4_data
+RUN wget -q http://cern.ch/geant4-data/datasets/PhotonEvaporation.2.0.tar.gz && tar xf PhotonEvaporation.2.0.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/G4NDL.3.13.tar.gz && tar xf G4NDL.3.13.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/G4EMLOW.6.9.tar.gz && tar xf G4EMLOW.6.9.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/G4RadioactiveDecay.3.2.tar.gz && tar xf G4RadioactiveDecay.3.2.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/G4ABLA.3.0.tar.gz && tar xf G4ABLA.3.0.tar.gz && \
+    wget -q http://cern.ch/geant4-data/datasets/RealSurface.1.0.tar.gz && tar xf RealSurface.1.0.tar.gz && \
+    rm -f *.tar.gz
+WORKDIR /SOFTWARE/
+
+# -- At this point you have to run geant4 build interactivly.
+# -- These are the steps I perform that are not defaults 
+# -- docker run -it <docker_ID> # docker_ID is image from results of build up to this point.
+#
+# cd geant4.9.3.p02/
+# ./Configure -build
+# Where should Geant4 be installed?  [/SOFTWARE/geant4.9.3.p02] /SOFTWRE/geant4
+# Directory /SOFTWRE/geant4.9.3.p02_build doesn't exist.  Use that name anyway? [n] y
+# Do you want to install all Geant4 headers in one directory? [n] y
+# Do you want to build static libraries too? [n] y
+# Do you want to build granular libraries as well? [n] y
+# Specify the path where the Geant4 data libraries are installed: [/SOFTWARE/geant4.9.3.p02/data] /SOFTWARE/geant4_data
+# CLHEP_BASE_DIR:                   /SOFTWARE/clhep/2.0.4.5
+# End of configuration phase.
+# Creating configuration setup file...
+# WARNING: the generated configuration file
+# can be edited if necessary!
+# You can introduce any change to the configuration file
+# /SOFTWARE/geant4.9.3.p02/.config/bin/Linux-g++/config.sh before the final installation.
+# To do so, use a shell escape now (e.g. !vi /SOFTWARE/geant4.9.3.p02/.config/bin/Linux-g++/config.sh).
+# Press [Enter] to start installation or use a shell escape to edit config.sh:
+# -- This takes a long time to build --
+#
+# ./Configure -install
+# ./Configure
+# cp env.* .. && cd ..
+# rm -rf geant4.9.3.p02
+# source env.sh
+# root@5664a2a8f277:/SOFTWARE# source env.sh
+# On this machine the G4SYSTEM=Linux-g++
+# On this machine the G4INSTALL=/SOFTWARE/geant4/src/geant4
+# On this machine the G4INCLUDE=/SOFTWARE/geant4/include/geant4
+# On this machine the G4LIB=/SOFTWARE/geant4/lib/geant4
+# On this machine the G4LEVELGAMMADATA=/SOFTWARE/geant4_data/PhotonEvaporation2.0
+# On this machine the G4RADIOACTIVEDATA=/SOFTWARE/geant4_data/RadioactiveDecay3.2
+# On this machine the G4LEDATA=/SOFTWARE/geant4_data/G4EMLOW6.9
+# On this machine the G4NEUTRONHPDATA=/SOFTWARE/geant4_data/G4NDL3.13
+# On this machine the G4ABLADATA=/SOFTWARE/geant4_data/G4ABLA3.0
+# On this machine the G4REALSURFACEDATA=/SOFTWARE/geant4_data/RealSurface1.0
+# On this machine the CLHEP_BASE_DIR=/SOFTWARE/clhep/2.0.4.5
+# On this machine the CLHEP_INCLUDE_DIR=/SOFTWARE/clhep/2.0.4.5/include
+# On this machine the CLHEP_LIB_DIR=/SOFTWARE/clhep/2.0.4.5/lib
+# On this machine the CLHEP_LIB=CLHEP
+# On this machine the G4UI_USE_TCSH=1
+# On this machine the XMFLAGS=
+# On this machine the XMLIBS=
+# On this machine the XMFLAGS=
+# On this machine the XAWFLAGS=
+# On this machine the XAWLIBS=
+# On this machine the G4LIB_BUILD_SHARED=1
+# On this machine the G4LIB_BUILD_STATIC=1
+
+# -- Now we need to save the image and push it dockerhub
+# docker ps -l #to get the docker_ID
+# docker commit <docker_ID> bmong/exo200_ubuntu_geant4:v01
+# docker push bmong/exo200_ubuntu_geant4:v01
+
+
+# -- This almost kinda works to install geant4 non-interactivly, but there are still issues.
+# -- Keeping it here incase I can figure them out later
+#ADD config.sh_ubuntu /SOFTWARE/g4config.sh
+#ADD Configure_dockerized Configure
+#RUN ["./Configure", "-f", "/SOFTWARE/g4config.sh", "-d", "-e", "-r", "-build"]
+#RUN ["/bin/bash", "-c", "./Configure", "-install"]
+#RUN ["/bin/bash", "-c", "./Configure"]
+#RUN cp $PWD/.config/bin/Linux-g++/env.sh . && \
+#    echo "source /SOFTWARE/geant4.9.3.p02/env.sh" >> ~/.bashrc && \
+#    echo "source /SOFTWARE/root/bin/thisroot.sh" >> ~/.bashrc  && \
+#    echo "export DISPLAY=localhost:0.0" >> ~/.bashrc
