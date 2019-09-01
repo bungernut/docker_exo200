@@ -1,7 +1,8 @@
 FROM ubuntu:trusty
 MAINTAINER bung@slac.stanford.edu
 
-RUN apt-get --assume-yes install wget \
+RUN apt-get update && \
+    apt-get --assume-yes install wget \
     dpkg-dev \
     cmake \
     g++ \
