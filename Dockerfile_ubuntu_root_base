@@ -27,5 +27,14 @@ WORKDIR /SOFTWARE/
 RUN wget -q https://root.cern.ch/download/root_v5.34.36.source.tar.gz && tar xf root_v5.34.36.source.tar.gz
 WORKDIR /SOFTWARE/root
 RUN sh ./configure --disable-xml --disable-fftw3 --enable-builtin-pcre --enable-builtin-freetype \
-        --disable-roofit --disable-krb5 --disable-ssl --enable-python --enable-soversion \
-        && RUN make -j4
+        --disable-roofit --disable-krb5 --disable-ssl --enable-python --enable-soversion --prefix=/SOFTWARE/root_build \
+        && make -j4
+ENV ROOTSYS="/SOFTWARE/root_build"
+ENV PATH="$ROOTSYS/bin:$PATH" 
+ENV LD_LIBRARY_PATH="$ROOTSYS/lib/root"
+ENV PYTHONPATH="$ROOTSYS/lib/root"
+ENV DISPLAY="localhost:0.0"
+RUN make install \
+    && rm /SOFTWARE/root_v5.34.36.source.tar.gz \
+    && rm -rf /SOFTWARE/root
+WORKDIR /SOFTWARE/
