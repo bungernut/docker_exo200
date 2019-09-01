@@ -1,0 +1,31 @@
+FROM ubuntu:trusty
+MAINTAINER bung@slac.stanford.edu
+
+RUN apt-get --assume-yes update && \
+    apt-get --assume-yes install wget \
+    dpkg-dev \
+    cmake \
+    g++ \
+    gcc \
+    binutils \
+    libx11-dev \
+    libxpm-dev \
+    libxft-dev \
+    libxext-dev \
+    build-essential \
+    make \
+    python \
+    python-dev \
+    libcxxtools-dev \
+    libfftw3-dev \
+    libmysqlclient-dev \ 
+    libpng12-dev \
+    libjpeg-turbo8-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /SOFTWARE/
+RUN wget -q https://root.cern.ch/download/root_v5.34.36.source.tar.gz && tar xf root_v5.34.36.source.tar.gz
+WORKDIR /SOFTWARE/root
+RUN sh ./configure --disable-xml --disable-fftw3 --enable-builtin-pcre --enable-builtin-freetype \
+        --disable-roofit --disable-krb5 --disable-ssl --enable-python --enable-soversion \
+        && RUN make -j4
