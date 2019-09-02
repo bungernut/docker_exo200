@@ -1,22 +1,32 @@
-# docker_exo200
-## Introduction
-exo200_ubuntu_root has basic root v5 and essential build tools in ubuntu image ~700MB
-exo200_ubuntu_geant4 installs CLHEP and geant4 on top of exo200_ubuntu_root
-The image with offline is kept in a private repository, but these can be used to compile offline as needed
+# Introduction
+### Dockerfile_ubuntu_root 
+builds `exo200_ubuntu_root` with basic root v5 and essential build tools in ubuntu:trusty image ~700MB \
+https://cloud.docker.com/repository/docker/bmong/exo200_ubuntu_root \
+
+### Dockerfile_ubuntu_geant4 
+builds `exo200_ubuntu_geant4` installing CLHEP and geant4 on top of exo200_ubuntu_root - require manual install steps (see below) \
+https://cloud.docker.com/repository/docker/bmong/exo200_ubuntu_geant4
+
+### ubuntu_build_exo200_offline.txt
+Instructions to build offline images. These images are are kept in a private repository. 
 
 ## Building the images
+
 ### exo200_ubuntu_root
-This image can be build alone with the docker file, updates to this github should trigger rebuild of this image
+`docker build --squash -f .\Dockerfile_ubuntu_root .` \
+This image can be built alone with the docker file, updates to this github should trigger rebuild of this image
+
 ### exo200_ubuntu_geant4
 * Requires manual steps. Build the image using the Docker_ubuntut_geant4 file\
 `docker build -t exo200_ubuntu_geant4_pre -f Docker_ubuntut_geant4 .`
-* Run the image and compile per instruction in Docker_ubuntut_geant4
+* Run the image and compile per instruction in Docker_ubuntu_geant4
 * Commit the changes to the docker-image\
 `docker commit <docker_ID> bmong/exo200_ubuntu_geant4:<tag>`
 * Push the image to dockerhub\
-`docker push bmong/exo200_ubuntu_geant4:v01`
+`docker push bmong/exo200_ubuntu_geant4:latest`
 
 ## Resulting Images
+
 ### exo200_ubuntu_root_base: 700 MB: Just root and binutils needed to build root
 
 ### exo200_ubuntu_offline_nog4: 855 MB  : Offline without Geant4/CLHEP
