@@ -19,7 +19,7 @@ This image can be build alone with the docker file, updates to this github shoul
 ## Resulting Images
 ### exo200_ubuntu_root_base: 700 MB: Just root and binutils needed to build root
 
-### exo200_ubuntu_offline_nog4: : Offline without Geant4/CLHEP
+### exo200_ubuntu_offline_nog4: 855 MB  : Offline without Geant4/CLHEP
 
 ### exo200_offline: 1.85 GB:  Offline with Geant4 and builtin data 
 ```
