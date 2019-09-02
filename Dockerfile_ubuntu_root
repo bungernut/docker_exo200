@@ -25,7 +25,7 @@ RUN apt-get update && \
 
 WORKDIR /SOFTWARE/root_source
 RUN wget -q https://root.cern.ch/download/root_v5.34.36.source.tar.gz \
-    && tar xf root_v5.34.36.source.tar.gz -C . \
+    && tar --strip-components=1 -xf root_v5.34.36.source.tar.gz -C . \
     && rm root_v5.34.36.source.tar.gz
 RUN sh ./configure --disable-xml --disable-fftw3 --enable-builtin-pcre --enable-builtin-freetype \
         --disable-roofit --disable-krb5 --disable-ssl --enable-python --enable-soversion --prefix=/SOFTWARE/root \
