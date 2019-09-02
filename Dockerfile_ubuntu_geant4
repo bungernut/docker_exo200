@@ -1,4 +1,4 @@
-FROM bmong/exo200_ubuntu_root_base:v01 as exo200_ubuntu_geant4_pre
+FROM bmong/exo200_ubuntu_root:latest
 MAINTAINER bung@slac.stanford.edu
 
 WORKDIR /SOFTWARE/clhep/
