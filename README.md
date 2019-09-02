@@ -34,7 +34,7 @@ This image can be built alone with the docker file, updates to this github shoul
 ### exo200_offline: 1.85 GB:  Offline with Geant4 and builtin data 
 ```
 root@6a3cb89039d1:/SOFTWARE# du --max-depth=1 -h .
-210M    ./root_build
+210M    ./root
 181M    ./offline
 4.0K    ./offline_source
 321M    ./geant4
