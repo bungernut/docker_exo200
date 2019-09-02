@@ -23,18 +23,18 @@ RUN apt-get update && \
     libjpeg-turbo8-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /SOFTWARE/
-RUN wget -q https://root.cern.ch/download/root_v5.34.36.source.tar.gz && tar xf root_v5.34.36.source.tar.gz
-WORKDIR /SOFTWARE/root
+WORKDIR /SOFTWARE/root_source
+RUN wget -q https://root.cern.ch/download/root_v5.34.36.source.tar.gz \
+    && tar xf root_v5.34.36.source.tar.gz -C . \
+    && rm root_v5.34.36.source.tar.gz
 RUN sh ./configure --disable-xml --disable-fftw3 --enable-builtin-pcre --enable-builtin-freetype \
-        --disable-roofit --disable-krb5 --disable-ssl --enable-python --enable-soversion --prefix=/SOFTWARE/root_build \
+        --disable-roofit --disable-krb5 --disable-ssl --enable-python --enable-soversion --prefix=/SOFTWARE/root \
         && make -j4
-ENV ROOTSYS="/SOFTWARE/root_build"
+ENV ROOTSYS="/SOFTWARE/root"
 ENV PATH="$ROOTSYS/bin:$PATH" 
 ENV LD_LIBRARY_PATH="$ROOTSYS/lib/root"
 ENV PYTHONPATH="$ROOTSYS/lib/root"
 ENV DISPLAY="localhost:0.0"
 RUN make install \
-    && rm /SOFTWARE/root_v5.34.36.source.tar.gz \
-    && rm -rf /SOFTWARE/root
+    && rm -rf /SOFTWARE/root_source
 WORKDIR /SOFTWARE/
