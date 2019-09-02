@@ -1,0 +1,29 @@
+checkout EXO200 offline to <local_offline>
+
+> docker run -it -v <local_offline>:/SOFTWARE/offline_source bmong/exo200_ubuntu_geant4:v01
+
+$ source env.sh
+$ cd offline_source/make
+$ ./configure --prefix=/SOFTWARE/offline --disable-viewer3d
+$ make clean
+$ make -j4 
+#NOTE: got a noncritical error about missing svn
+
+> docker ps -l #to get the docker_ID
+> docker commit <docker_ID> bmong/exo200_offline:v01_g4
+> docker push bmong/exo200_offline:v01_g4
+
+
+
+### For non-g4 version ###
+
+> docker run -it -v <local_offline>:/SOFTWARE/offline_source bmong/exo200_ubuntu_root_base:v01
+
+$ cd offline_source/make
+$ ./configure --prefix=/SOFTWARE/offline --disable-viewer3d
+$ make clean
+$ make -j4 
+
+> docker ps -l #to get the docker_ID
+> docker commit <docker_ID> bmong/exo200_offline:v01_nog4
+> docker push bmong/exo200_offline:v01_nog4
