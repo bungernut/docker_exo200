@@ -1,6 +1,10 @@
 # Introduction
 ### Dockerfile_ubuntu_root 
-builds `exo200_ubuntu_root` with basic root v5 and essential build tools in ubuntu:trusty image ~700MB \
+builds `exo200_ubuntu_root` with basic root v5 and essential build tools in ubuntu:trusty image 404MB \
+https://cloud.docker.com/repository/docker/bmong/exo200_ubuntu_root \
+
+### Dockerfile_ubuntu_root_boost
+builds `exo200_ubuntu_root_boost` with boost, root, and essential build tools in ubuntu:trusty image 413MB \
 https://cloud.docker.com/repository/docker/bmong/exo200_ubuntu_root \
 
 ### Dockerfile_ubuntu_geant4 
